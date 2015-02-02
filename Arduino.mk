@@ -57,12 +57,12 @@ endif
 
 %.prog: %.hex
 ifeq ($(filter %-pc-cygwin,$(MAKE_HOST)),)
-	$(ARDMK_PATH)/../avrdude -v -v -p $(CPU) -c$(PROGRAMMER) -P$(PORT) -b$(BR) -V -D -U flash:w:$<:i -C $(ARDMK_PATH)/../avrdude.conf
+	$(ARDMK_PATH)/../avrdude -v -v -p $(CPU) -c$(PROGRAMMER) -P$(PORT) -b$(BR) -V -U flash:w:$<:i -C $(ARDMK_PATH)/../avrdude.conf
 else
 	@CFG="`cygpath -m $(ARDMK_PATH)/etc/avrdude.conf`" ; \
 	PS4=; \
 	set -x; \
-	$(ARDMK_PATH)/bin/avrdude -v -v -v -v -p $(CPU) -c$(PROGRAMMER) -P$(PORT) -b$(BR) -V -D -U flash:w:$<:i -C$$CFG 
+	$(ARDMK_PATH)/bin/avrdude -v -v -p $(CPU) -c$(PROGRAMMER) -P$(PORT) -b$(BR) -V -U flash:w:$<:i -C$$CFG 
 endif
 
 ########################

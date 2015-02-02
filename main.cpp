@@ -14,12 +14,12 @@ void loop() {
  digitalWrite(1,HIGH);
  TXLED1;
  RXLED0;
- delay(100);
+ delay(60);
  digitalWrite(0,HIGH);
  digitalWrite(1,LOW);
  TXLED0;
  RXLED1;
- delay(100);  
+ delay(0x255);  
 }
 
 int main(void)
