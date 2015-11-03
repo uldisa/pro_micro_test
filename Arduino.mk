@@ -61,8 +61,20 @@ ifeq ($(filter %-pc-cygwin,$(MAKE_HOST)),)
 else
 	@CFG="`cygpath -m $(ARDMK_PATH)/etc/avrdude.conf`" ; \
 	PS4=; \
+	PORT=`$(ARDMK_PATH)/../listComPorts.exe |grep 'USB\\\\VID_2341\&PID_803[67]'|awk '{print $$1}'` ; \
+	if [ -z "$$PORT" ] ; then exit 1; fi; \
+	/cygdrive/c/Python27/python.exe reset.py $$PORT ; \
+	C=20; \
+	while [ $$C -gt 0 ] ; do \
+		BOOTPORT=`$(ARDMK_PATH)/../listComPorts.exe |grep 'USB\\\\VID_2341\&PID_003[67]'|awk '{print $$1}'	` ; \
+		echo -n "."; \
+		if [ -n "$$BOOTPORT" ] ; then break; fi; \
+		sleep 0.5; \
+		C=$$(( $$C - 1 )); \
+	done; \
+	if [ -z "$BOOTPORT" ] ; then exit 1; fi; \
 	set -x; \
-	$(ARDMK_PATH)/bin/avrdude -v -v -p $(CPU) -c$(PROGRAMMER) -P$(PORT) -b$(BR) -V -U flash:w:$<:i -C$$CFG 
+	$(ARDMK_PATH)/bin/avrdude -v -v -p $(CPU) -c$(PROGRAMMER) -P$$BOOTPORT -b$(BR) -V -U flash:w:$<:i -C$$CFG 
 endif
 
 ########################
